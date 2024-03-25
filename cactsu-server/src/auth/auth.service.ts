@@ -13,6 +13,11 @@ export class AuthService {
 
   async validateUser(phoneNumber: string, password: string) {
     const user = await this.userService.findOne(phoneNumber);
+    
+    if (!user) {
+      throw new UnauthorizedException('User not found');
+    }
+
     const passwordIsMatch = await argon2.verify(user.password, password);
     if (user && passwordIsMatch) {
       return user;
