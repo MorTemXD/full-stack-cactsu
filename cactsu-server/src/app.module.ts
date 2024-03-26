@@ -18,7 +18,7 @@ import { ContactModule } from './contact/contact.module';
       inject: [ConfigService],
       useFactory: (configService: ConfigService) => ({
         type: 'postgres',
-        host: configService.get('DB_HOST'),
+        host: process.env.MODE_RUN === 'docker-compose' ? 'db' : 'localhost',
         port: configService.get('DB_PORT'),
         username: configService.get('DB_USER'),
         password: configService.get('DB_PASSWORD'),
