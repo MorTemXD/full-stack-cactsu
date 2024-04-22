@@ -27,5 +27,5 @@ jobs:
       uses: docker/build-push-action@v5
       with:
         push: true
-        file: {context}/cactsu-server/Dockerfile
+        context: ./cactsu-server/Dockerfile
         tags: user/be:latest
