@@ -29,3 +29,7 @@ jobs:
         push: true
         context: ./cactsu-server/
         tags: user/be:latest
+
+    - name: Debug Docker Build Logs
+      run: |
+        docker build ./cactsu-server/ --tag user/be:latest --no-cache --progress plain
