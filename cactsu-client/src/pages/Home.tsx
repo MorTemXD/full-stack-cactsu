@@ -45,27 +45,18 @@ const Chat: React.FC = () => {
                         ))}
                     </div>
                 </div>
-                <div className="p-4 bg-gray-100">
-                    <form id="messForm" onSubmit={handleSubmit} className="flex flex-col gap-2">
-                        <input
-                            type="text"
-                            className="p-2 border rounded-md"
-                            placeholder="Введіть ваш нікнейм"
-                            value={nickname}
-                            onChange={(e) => setNickname(e.target.value)}
-                        />
-                        <input
-                            type="text"
-                            className="p-2 border rounded-md"
-                            placeholder="Введіть ваше повідомлення"
-                            value={message}
-                            onChange={(e) => setMessage(e.target.value)}
-                        />
-                        <button type="submit" className="p-2 bg-blue-500 text-white rounded-md">
-                            Надіслати
-                        </button>
-                    </form>
-                </div>
+                <form onSubmit={handleSubmit}>
+                    <input
+                        type="text"
+                        className="p-2 border rounded-md"
+                        placeholder="Enter your message"
+                        value={message}
+                        onChange={(e) => setMessage(e.target.value)}
+                    />
+                    <button type="submit" className="p-2 bg-blue-500 text-white rounded-md">
+                        Send
+                    </button>
+                </form>
             </div>
         </div>
     );
