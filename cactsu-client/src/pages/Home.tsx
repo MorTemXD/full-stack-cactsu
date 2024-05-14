@@ -7,13 +7,28 @@ interface Message {
 }
 
 const Chat: React.FC = () => {
-    const [nickname, setNickname] = useState<string>('');
+    const [nickname, setNickname] = useState<string>('Guest');
     const [message, setMessage] = useState<string>('');
     const [messages, setMessages] = useState<Message[]>([]);
     const socket: Socket = io();
 
     useEffect(() => {
-        socket.on('add mess', function(data: Message) {
+        const fetchNickname = async () => {
+            try {
+                const response = await fetch('/api/nickname'); 
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+                const data = await response.json();
+                setNickname(data.nickname);
+            } catch (err) {
+                console.error('Failed to fetch nickname:', err);
+            }
+        };
+
+        fetchNickname();
+
+        socket.on('add mess', (data: Message) => {
             setMessages((prevMessages) => [...prevMessages, data]);
         });
 
@@ -31,12 +46,10 @@ const Chat: React.FC = () => {
     };
 
     return (
-        <div className="container mx-auto mt-10 p-4">
-            <div className="bg-white shadow-md rounded-lg overflow-hidden">
-                <div className="bg-blue-500 p-4">
-                    <h4 className="text-white text-lg">Chat</h4>
-                </div>
-                <div className="p-4 h-80 overflow-y-auto">
+        <div className="mt-40 flex flex-col justify-center items-center text-black">
+            <div className="main bg-white p-8 rounded-lg shadow-lg w-full max-w-md">
+                <h1 className="text-center text-xl mb-10 text-blue-500">Chat</h1>
+                <div className="p-4 h-80 overflow-y-auto border border-gray-200 rounded-lg">
                     <div id="all_messages">
                         {messages.map((msg, index) => (
                             <div key={index} className="mb-2">
@@ -45,15 +58,17 @@ const Chat: React.FC = () => {
                         ))}
                     </div>
                 </div>
-                <form onSubmit={handleSubmit}>
-                    <input
-                        type="text"
-                        className="p-2 border rounded-md"
-                        placeholder="Enter your message"
-                        value={message}
-                        onChange={(e) => setMessage(e.target.value)}
-                    />
-                    <button type="submit" className="p-2 bg-blue-500 text-white rounded-md">
+                <form onSubmit={handleSubmit} className="flex flex-col gap-5 mt-5">
+                    <div className="relative">
+                        <input
+                            type="text"
+                            className="input pl-10 pr-2 w-full border rounded-md p-2"
+                            placeholder="Enter your message"
+                            value={message}
+                            onChange={(e) => setMessage(e.target.value)}
+                        />
+                    </div>
+                    <button type="submit" className="btn btn-purple mx-auto bg-blue-500 text-white p-2 rounded-md">
                         Send
                     </button>
                 </form>
